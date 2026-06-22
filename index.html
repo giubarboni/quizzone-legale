@@ -196,11 +196,58 @@
       flex-direction: column;
       flex: 1;
     }
+
+    /* ── Cover screen ── */
+    #cover-view {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 32px;
+      text-align: center;
+      gap: 0;
+    }
+    .cover-title {
+      font-size: 52px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+    .cover-powered {
+      font-size: 13px;
+      color: var(--white60);
+      letter-spacing: 0.02em;
+      margin-bottom: 64px;
+    }
+    .cover-cta {
+      width: 100%;
+      padding: 16px;
+      background: var(--white);
+      color: var(--bg);
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .cover-cta:hover { opacity: 0.88; }
+    .cover-cta:active { opacity: 0.75; }
   </style>
 </head>
 <body>
 
-  <div id="quiz-view">
+  <div id="cover-view">
+    <h1 class="cover-title">che ne siai?</h1>
+    <p class="cover-powered">powered by Note Legali</p>
+    <button class="cover-cta" onclick="startQuiz()">Inizia il quiz →</button>
+  </div>
+
+  <div id="quiz-view" style="display:none">
     <div class="q-header">
       <div class="progress-meta">
         <span id="prog-label">1 di 5</span>
@@ -295,6 +342,12 @@
 
     let cur = 0, score = 0, selected = null;
 
+    function startQuiz() {
+      document.getElementById('cover-view').style.display = 'none';
+      document.getElementById('quiz-view').style.display = 'flex';
+      render();
+    }
+
     function render() {
       const q = Qs[cur];
       const pct = Math.round((cur + 1) / Qs.length * 100);
@@ -348,11 +401,8 @@
     function restart() {
       cur = 0; score = 0; selected = null;
       document.getElementById('result-view').style.display = 'none';
-      document.getElementById('quiz-view').style.display = 'flex';
-      render();
+      document.getElementById('cover-view').style.display = 'flex';
     }
-
-    render();
   </script>
 </body>
 </html>
