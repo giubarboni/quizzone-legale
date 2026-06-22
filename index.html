@@ -207,11 +207,16 @@
       flex: 1;
       align-items: center;
       justify-content: center;
-      padding: 40px 32px;
+      padding: 40px 32px 24px;
       text-align: center;
       gap: 0;
       position: relative;
       overflow: hidden;
+    }
+    .cover-spacer { flex: 1; }
+    .cover-bottom {
+      width: 100%;
+      padding-bottom: 0;
     }
 
     /* halftone dot bg */
@@ -226,9 +231,9 @@
 
     .cover-title {
       font-family: 'Bangers', cursive;
-      font-size: 120px;
+      font-size: 100px;
       font-weight: 400;
-      line-height: 0.95;
+      line-height: 0.8;
       letter-spacing: 3px;
       color: var(--white);
       -webkit-text-stroke: 2px rgba(0,0,0,0.35);
@@ -248,7 +253,7 @@
       color: var(--white60);
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      margin-bottom: 120px;
+      margin-bottom: 0;
       position: relative;
     }
     .cover-cta {
@@ -275,9 +280,13 @@
 <body>
 
   <div id="cover-view">
+    <div class="cover-spacer"></div>
     <h1 class="cover-title">Che ne<br><span class="pop">SIAI?</span></h1>
     <p class="cover-powered">powered by Note Legali</p>
-    <button class="cover-cta" onclick="startQuiz()">Inizia il quiz →</button>
+    <div class="cover-spacer"></div>
+    <div class="cover-bottom">
+      <button class="cover-cta" onclick="startQuiz()">Inizia il quiz →</button>
+    </div>
   </div>
 
   <div id="quiz-view" style="display:none">
