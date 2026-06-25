@@ -444,14 +444,16 @@
       gap: 12px;
     }
     .lb-back {
-      background: none; border: none;
-      color: var(--white60); font-size: 16px; cursor: pointer;
+      background: var(--white10); border: 1px solid var(--white20);
+      border-radius: 50%; width: 36px; height: 36px;
+      color: var(--white); font-size: 16px; cursor: pointer;
       padding: 0; -webkit-tap-highlight-color: transparent;
-      font-family: inherit;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
     }
-    .lb-back:hover { color: var(--white); }
+    .lb-back:hover { background: var(--white20); }
     .lb-header-title {
-      font-size: 17px; font-weight: 600; color: var(--white);
+      font-size: 20px; font-weight: 600; color: var(--white);
     }
     .lb-list {
       flex: 1; overflow-y: auto;
@@ -483,6 +485,19 @@
       text-align: center; color: var(--white60); padding: 48px 0;
       font-size: 15px;
     }
+    .lb-row-highlight {
+      border: 2px solid var(--white);
+      background: rgba(255,255,255,0.1);
+    }
+    .lb-floating-btn {
+      position: absolute; top: 16px; right: 20px;
+      background: var(--white10); border: 1px solid var(--white20);
+      border-radius: 50%; width: 40px; height: 40px;
+      font-size: 18px; cursor: pointer; z-index: 2;
+      display: flex; align-items: center; justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .lb-floating-btn:hover { background: var(--white20); }
   </style>
 </head>
 <body>
@@ -530,6 +545,7 @@
   </div>
 
   <div id="result-view">
+    <button class="lb-floating-btn" onclick="showLeaderboard()">🏆</button>
     <div class="result-emoji-container">
       <div class="result-emoji-frame">
         <div class="result-icon" id="r-icon"></div>
@@ -542,7 +558,6 @@
       <p class="result-desc" id="r-desc"></p>
     </div>
     <div class="result-actions">
-      <button class="info-btn" onclick="showLeaderboard()">Classifica 🏆</button>
       <button class="info-btn" onclick="openSheet()">Che cos'è Note Legali?</button>
       <button class="restart-btn" onclick="restart()">Riprova</button>
     </div>
@@ -550,7 +565,7 @@
 
   <div id="leaderboard-view">
     <div class="lb-header">
-      <button class="lb-back" onclick="backFromLeaderboard()">← Indietro</button>
+      <button class="lb-back" onclick="backFromLeaderboard()">←</button>
       <span class="lb-header-title">Classifica</span>
     </div>
     <div class="lb-list" id="lb-list">
@@ -654,6 +669,7 @@
     let cur = 0, score = 0, selected = null;
     let playerName = '';
     let startTime = null;
+    let lastEntryName = '', lastEntryScore = 0, lastEntryTime = 0;
 
     function startQuiz() {
       document.getElementById('cover-view').style.display = 'none';
@@ -724,6 +740,7 @@
       document.getElementById('r-sub').textContent = score === 1 ? '1 risposta corretta' : score + ' risposte corrette';
       document.getElementById('r-title').textContent = r.title;
       document.getElementById('r-desc').textContent = r.desc;
+      lastEntryName = playerName; lastEntryScore = score; lastEntryTime = elapsed;
       db.ref('scores').push({ name: playerName, score: score, time: elapsed });
     }
 
@@ -762,9 +779,14 @@
         }
         const medals = ['🥇', '🥈', '🥉'];
         list.innerHTML = '';
+        let highlighted = false;
         top.forEach(function(entry, i) {
           const row = document.createElement('div');
           row.className = 'lb-row';
+          if (!highlighted && entry.name === lastEntryName && entry.score === lastEntryScore && entry.time === lastEntryTime) {
+            row.classList.add('lb-row-highlight');
+            highlighted = true;
+          }
           const mins = Math.floor(entry.time / 60);
           const secs = entry.time % 60;
           const timeStr = mins > 0 ? mins + 'm ' + secs + 's' : secs + 's';
